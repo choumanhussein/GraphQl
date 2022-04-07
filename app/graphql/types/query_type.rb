@@ -1,19 +1,16 @@
-Types::QueryType = GraphQL::ObjectType.define do
-  name "Query"
-  # Add root-level fields here.
-  # They will be entry points for queries on your schema.
+module Types
+  class QueryType < Types::BaseObject
+    # Add `node(id: ID!) and `nodes(ids: [ID!]!)`
+    include GraphQL::Types::Relay::HasNodeField
+    include GraphQL::Types::Relay::HasNodesField
 
-  # TODO: remove me
-  field :testField, types.String do
-    description "An example field added by the generator"
-    resolve ->(obj, args, ctx) {
-      "Hello World!"
-    }
-  end
+    # Add root-level fields here.
+    # They will be entry points for queries on your schema.
 
-  field :blog, !Types::BlogType do
-    resolve ->(obj, args, ctx) {
-      ctx[:blog]
-    }
+    # TODO: remove me
+    field :blog, BlogType, null: false
+    def blog
+      context[:blog]
+    end
   end
 end
